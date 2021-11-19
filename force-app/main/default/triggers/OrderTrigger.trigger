@@ -1,9 +1,12 @@
-trigger OrderTrigger on Order(before update, after delete) {
+trigger OrderTrigger on Order(before update, after update, after delete) {
     OrderTriggerHandler MyOrder = new OrderTriggerHandler();
-    if(Trigger.isUpdate) {
-        MyOrder.preventUpdateIfNoProduct(Trigger.old);
+    if(Trigger.isBefore && Trigger.isUpdate) {
+        MyOrder.preventUpdateIfNoProduct(Trigger.oldMap, Trigger.newMap);
     }
-    if(Trigger.isDelete) {
+    if(Trigger.isAfter && Trigger.isUpdate) {
         MyOrder.uncheckIfNoOrder(Trigger.new);
+    }
+    if(Trigger.isAfter && Trigger.isDelete) {
+        MyOrder.uncheckIfNoOrder(Trigger.old);
     }
 }
