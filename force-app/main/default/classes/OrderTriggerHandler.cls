@@ -21,7 +21,7 @@ public class OrderTriggerHandler {
         }
         //create list of orders + orderitems with Id from the set
         List<Order> listOrderWithItems = [SELECT Id, (SELECT Id FROM OrderItems) 
-                                    FROM Order WHERE Id in : newOrderIds];
+                                         FROM Order WHERE Id in : newOrderIds];
         //if list with new orders has at least 1 element
         if(newOrderIds.size() > 0 && newOrderIds != null) {
             //then for each element of the order list,
