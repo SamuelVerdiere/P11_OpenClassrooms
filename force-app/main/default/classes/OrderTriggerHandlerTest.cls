@@ -131,77 +131,6 @@ public with sharing class OrderTriggerHandlerTest {
 
         /* TESTS IN AFTER DELETE */
     @isTest
-    public static void checkedBoxWithDraftStatus() {
-        /* the test method from the factory takes as parameters :
-        - The Number of Accounts needed
-        - The Number of Orders per Accound needed
-        - The quantity of Items per order */
-        //GIVEN : create data
-        DataFactory.createOrders(1, 2, 1);
-        Set<Id> orderId = new Set<Id>();
-        List<Account> listOfAccounts = [SELECT Id, actif__c FROM Account];
-        for(Account a : listOfAccounts) {
-            orderId.add(a.Id);
-        }
-        List<Order> listOfOrders = [SELECT Id, Status FROM Order WHERE AccountId IN: orderId];
-        //WHEN : activating trigger with conditions
-        Test.startTest();
-        listOfOrders.remove(1);
-        for(Account acc : listOfAccounts) {
-            for(Order ord: acc.Orders) {
-                ord.Description = 'This is test description';
-            }
-        }
-        update listOfAccounts;
-        update listOfOrders;
-            //THEN : assert results
-        Test.stopTest();
-        System.assertEquals(1, listOfOrders.size());
-        for(Account acc : listOfAccounts) {
-            System.assertEquals(true, acc.actif__c);
-            for(Order ord : acc.Orders) {
-                System.assertEquals('Draft', ord.Status);
-    }}}
-
-    @isTest
-    public static void checkedBoxWithActiveStatus() {
-        /* the test method from the factory takes as parameters :
-        - The Number of Accounts needed
-        - The Number of Orders per Accound needed
-        - The quantity of Items per order */
-        //GIVEN : create data
-        DataFactory.createOrders(1, 2, 1);
-
-        Set<Id> orderId = new Set<Id>();
-        List<Account> listOfAccounts = [SELECT Id, actif__c FROM Account];
-        for(Account a : listOfAccounts) {
-            orderId.add(a.Id);
-        }
-        List<Order> listOfOrders = [SELECT Id, Status FROM Order WHERE AccountId IN: orderId];
-        //WHEN : activating trigger with conditions
-        Test.startTest();
-        update listOfOrders;
-        update listOfAccounts;
-        listOfOrders.remove(0);
-        update listOfOrders;
-        update listOfAccounts;
-        for(Account acc : listOfAccounts) {
-            for(Order ord: acc.Orders) {
-                ord.Status = 'Activated';
-            }
-        }
-        update listOfAccounts;
-        update listOfOrders;
-            //THEN : assert results
-        Test.stopTest();
-        System.assertEquals(1, listOfOrders.size());
-        for(Account acc : listOfAccounts) {
-            System.assertEquals(true, acc.actif__c);
-            for(Order ord : acc.Orders) {
-                System.assertEquals('Activated', ord.Status);
-    }}}
-
-    @isTest
     public static void UncheckBoxIfLastOrderDeleted() {
         /* the test method from the factory takes as parameters :
         - The Number of Accounts needed
@@ -227,8 +156,8 @@ public with sharing class OrderTriggerHandlerTest {
             System.assert(acc.actif__c == false);
         }}
 
-        @isTest
-        public static void UncheckedBoxIfNoOrder() {
+    @isTest
+    public static void UncheckedBoxIfNoOrder() {
             /* the test method from the factory takes as parameters :
             - The Number of Accounts needed
             - The Number of Orders per Accound needed
@@ -243,4 +172,142 @@ public with sharing class OrderTriggerHandlerTest {
             for(Account acc : listOfAccounts) {
                 System.assertEquals(false, acc.actif__c);
             }}
+
+            // @isTest
+            // public static void checkedBoxWithDraftStatus() {
+            //     /* the test method from the factory takes as parameters :
+            //     - The Number of Accounts needed
+            //     - The Number of Orders per Accound needed
+            //     - The quantity of Items per order */
+            //     //GIVEN : create data
+            //     DataFactory.createOrders(1, 2, 1);
+            //     Set<Id> orderId = new Set<Id>();
+            //     List<Account> listOfAccounts = [SELECT Id, actif__c FROM Account];
+            //     for(Account a : listOfAccounts) {
+            //         orderId.add(a.Id);
+            //     }
+            //     List<Order> listOfOrders = [SELECT Id, Status FROM Order WHERE AccountId IN: orderId];
+            //     //WHEN : activating trigger with conditions
+            //     Test.startTest();
+            //     listOfOrders.remove(0);
+            //     for(Account acc : listOfAccounts) {
+            //         for(Order ord: acc.Orders) {
+            //             ord.Description = 'This is test description';
+            //         }
+            //     }
+            //     update listOfAccounts;
+            //     update listOfOrders;
+            //         //THEN : assert results
+            //     Test.stopTest();
+            //     System.assertEquals(1, listOfOrders.size());
+            //     for(Account acc : listOfAccounts) {
+            //         System.assertEquals(true, acc.actif__c);
+            //         for(Order ord : acc.Orders) {
+            //             System.assertEquals('Draft', ord.Status);
+            // }}}
+        
+            // @isTest
+            // public static void checkedBoxWithActiveStatus() {
+            //     /* the test method from the factory takes as parameters :
+            //     - The Number of Accounts needed
+            //     - The Number of Orders per Accound needed
+            //     - The quantity of Items per order */
+            //     //GIVEN : create data
+            //     DataFactory.createOrders(1, 2, 1);
+        
+            //     Set<Id> orderId = new Set<Id>();
+            //     List<Account> listOfAccounts = [SELECT Id, actif__c FROM Account];
+            //     for(Account a : listOfAccounts) {
+            //         orderId.add(a.Id);
+            //     }
+            //     List<Order> listOfOrders = [SELECT Id, Status FROM Order WHERE AccountId IN: orderId];
+            //     //WHEN : activating trigger with conditions
+            //     Test.startTest();
+            //     for(Account acc : listOfAccounts) {
+            //         for(Order ord: acc.Orders) {
+            //             ord.Description = 'This is test description';
+            //         }
+            //     }
+            //     listOfOrders.remove(0);
+            //     update listOfOrders;
+            //     update listOfAccounts;
+            //     for(Account acc : listOfAccounts) {
+            //         for(Order ord: acc.Orders) {
+            //             ord.Status = 'Activated';
+            //         }
+            //     }
+            //     update listOfAccounts;
+            //     update listOfOrders;
+            //         //THEN : assert results
+            //     Test.stopTest();
+            //     System.assertEquals(1, listOfOrders.size());
+            //     for(Account acc : listOfAccounts) {
+            //         System.assertEquals(true, acc.actif__c);
+            //         for(Order ord : acc.Orders) {
+            //             System.assertEquals('Activated', ord.Status);
+            // }}}
+            @isTest
+            public static void UncheckBoxIfAlreadyChecked() {
+                /* the test method from the factory takes as parameters :
+                - The Number of Accounts needed
+                - The Number of Orders per Accound needed
+                - The quantity of Items per order */
+                //GIVEN : create data
+                DataFactory.createOrders(1, 1, 1);
+                Set<Id> orderId = new Set<Id>();
+                List<Account> listOfAccounts = [SELECT Id, actif__c FROM Account];
+                for(Account a : listOfAccounts) {
+                    orderId.add(a.Id);
+                }
+                List<Order> listOfOrders = [SELECT Id FROM Order WHERE AccountId IN: orderId];
+                //WHEN : activating trigger with conditions
+                Test.startTest();
+                listOfOrders.remove(0);
+                update listOfOrders;
+                    //THEN : assert results
+                Test.stopTest();
+                System.assertEquals(0, listOfOrders.size());
+                for(Account acc : listOfAccounts) {
+                    System.assert(acc.actif__c == false);
+                }}
+
+                @isTest
+                public static void checkUncheckingIsDone() {
+                    /* the test method from the factory takes as parameters :
+                    - The Number of Accounts needed
+                    - The Number of Orders per Accound needed
+                    - The quantity of Items per order */
+                    //GIVEN : create data
+                    DataFactory.createOrders(1, 1, 1);
+                    Set<Id> orderId = new Set<Id>();
+                    List<Account> listOfAccounts = [SELECT Id, actif__c FROM Account];
+                    List<Account> updatedAccounts = new List<Account>();
+                    update listOfAccounts;
+                    for(Account a : listOfAccounts) {
+                        orderId.add(a.Id);
+                        a.actif__c = true;
+                        for(Order o : a.Orders) {
+                        o.Description = 'This is test description';
+                    }
+                    update listOfAccounts;
+                    System.assert(a.actif__c == true);
+                    }
+                    List<Order> listOfOrders = [SELECT Id FROM Order WHERE AccountId IN: orderId];
+                    //WHEN : activating trigger with conditions
+                    Test.startTest();
+                    listOfOrders.remove(0);
+                    update listOfOrders;
+                    update listOfAccounts;
+                        //THEN : assert results
+                    Test.stopTest();
+                    //2e liste d'accounts pour check
+                    updatedAccounts = [SELECT Id, actif__c FROM Account];
+                    update updatedAccounts;
+                    System.assertEquals(0, listOfOrders.size());
+                    for(Account a : updatedAccounts) {
+                        System.assert(a.actif__c == false);
+                    }
+                }
+
+
 }
