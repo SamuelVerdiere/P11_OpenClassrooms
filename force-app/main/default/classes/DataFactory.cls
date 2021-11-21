@@ -42,7 +42,9 @@ public class DataFactory {
             /* For each of these account, increment depending on the number of orders  
             and add created orders in the list. The status of each order is set on "draft" */
             for(Integer o = 0 ; o < numberOfOrders ; o++) { 
-                testOrderz.add(new Order(AccountID = testaccts.id, EffectiveDate = myDate, Pricebook2Id = testPriceBookEntry.Pricebook2Id, Status = 'Draft'));}}
+                testOrderz.add(new Order(AccountID = testaccts.id, EffectiveDate = myDate, Pricebook2Id = testPriceBookEntry.Pricebook2Id, Status = 'Draft'));
+            
+        }}
         insert testOrderz;
         /* Now Orders are created, depending on variable "numberOfOrders".*/
 
