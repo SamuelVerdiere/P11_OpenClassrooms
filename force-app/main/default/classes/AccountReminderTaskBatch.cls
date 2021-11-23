@@ -33,6 +33,7 @@ global class AccountReminderTaskBatch implements Database.Batchable<sObject>, Da
         //if that list isn't empty, insert tasks from list
         if(!listOfNewTasks.isEmpty()) {
             insert listOfNewTasks;
+            System.debug('tasks created: ' + listOfNewTasks);
         }
     }
 
