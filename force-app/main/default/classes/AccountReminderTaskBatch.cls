@@ -24,7 +24,10 @@ global class AccountReminderTaskBatch implements Database.Batchable<sObject>, Da
             //if the account does not contain task,
             if(!existingTask.contains(acc.Id)) {
                 //create new task and add it to list
-                Task newTask = new Task (Description = 'Call client. Reminder in 5 days.', Status = 'New', Subject = 'Call', ReminderDateTime = myDate,
+                Task newTask = new Task (Description = 'Call client. Reminder in 5 days.', 
+                Status = 'New', 
+                Subject = 'Call', 
+                ReminderDateTime = myDate,
                 WhatId = acc.Id, Priority = 'Normal', CallType = 'Outbound');
                 listOfNewTasks.add(newTask);
             }
