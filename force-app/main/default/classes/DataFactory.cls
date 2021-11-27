@@ -1,7 +1,7 @@
 @isTest
 public class DataFactory {
     public static void createOrders(Integer numberOfAccounts, Integer numberOfOrders, 
-    Integer ItemQuantity) {
+    Integer ItemQuantity, Integer numberOfTasks) {
         /* This data factory allows creation of accounts, orders and order items.
         In the invocation of the data factory method "createOrders", we can choose number of orders, accounts and order items, by
         putting integers as parameters. 
@@ -26,6 +26,7 @@ public class DataFactory {
         List<Account> testAccounts = new List<Account>();
         List<Order> testOrderz = new List<Order>();
         List<OrderItem> testOrderItem = new List<OrderItem>();
+        List<Task> testTasks = new List<Task>();
         //Then create 2 for loops, each increments depending on the number of accounts/orders.
         for (Integer i = 0; i < numberOfAccounts; i++) {
         //Create new accounts and place them in the list, then insert them
@@ -43,11 +44,16 @@ public class DataFactory {
             and add created orders in the list. The status of each order is set on "draft" */
             for(Integer o = 0 ; o < numberOfOrders ; o++) { 
                 testOrderz.add(new Order(AccountID = testaccts.id, EffectiveDate = myDate, Pricebook2Id = testPriceBookEntry.Pricebook2Id, Status = 'Draft'));
-            
-        }}
+                }}
         insert testOrderz;
         /* Now Orders are created, depending on variable "numberOfOrders".*/
-
+        //create task for account
+        for(Integer t = 0; t < testAccounts.size(); t++) {
+            Account testaccs = testAccounts[t];
+            for(Integer ta = 0; ta < numberOfTasks; ta++) {
+                testTasks.add(new Task(Description = 'Call now', Status = 'New', Subject='Call', ReminderDateTime=futureDate, WhatId=testaccs.Id, Priority='Normal', CallType='Outbound'));
+            }}
+        insert testTasks;
         //Create items for each order
         // the first for loop will iterate on each orders from the previous list;
         for (Integer oi = 0; oi < testOrderz.size(); oi++) {

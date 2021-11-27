@@ -11,7 +11,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 0);
+         DataFactory.createOrders(1, 1, 0, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
          //WHEN : activating trigger with conditions
          Test.startTest();
@@ -34,7 +34,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 1);
+         DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
          //WHEN : activating trigger with conditions
          Test.startTest();
@@ -57,7 +57,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 2);
+         DataFactory.createOrders(1, 1, 2, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
          List<OrderItem> listOfItems = [SELECT Id FROM OrderItem];
          //WHEN : activating trigger with conditions
@@ -82,7 +82,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 1);
+         DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
          List<OrderItem> listOfItems = [SELECT Id FROM OrderItem];
          //WHEN : activating trigger with conditions
@@ -111,7 +111,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 1);
+         DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
          List<OrderItem> listOfItems = [SELECT Id FROM OrderItem];
          //WHEN : activating trigger with conditions
@@ -137,7 +137,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 0);
+         DataFactory.createOrders(1, 1, 0, 0);
          Set<Id> orderId = new Set<Id>();
          Account myAccount = [SELECT Id, actif__c FROM Account WHERE actif__c = true LIMIT 1];
          List<Order> listOfOrders = [SELECT Id, Status FROM Order WHERE AccountId =: myAccount.Id];
@@ -159,7 +159,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 0, 0);
+         DataFactory.createOrders(1, 0, 0, 0);
          //WHEN
          Test.startTest();
          Account myAccount = [SELECT Id, actif__c FROM Account LIMIT 1];
@@ -175,7 +175,7 @@ public with sharing class OrderTriggerHandlerTest {
          - The Number of Orders per Accound needed
          - The quantity of Items per order */
          //GIVEN : create data
-         DataFactory.createOrders(1, 1, 1);
+         DataFactory.createOrders(1, 1, 1, 0);
          Set<Id> orderId = new Set<Id>();
          Account myAccount = [SELECT Id, actif__c FROM Account WHERE actif__c = true LIMIT 1];
          List<Order> listOfOrders = [SELECT Id FROM Order WHERE AccountId =: myAccount.Id];
@@ -199,7 +199,7 @@ public with sharing class OrderTriggerHandlerTest {
         - The Number of Orders per Accound needed
         - The quantity of Items per order */
         //GIVEN : create data
-        DataFactory.createOrders(1, 1, 1);
+        DataFactory.createOrders(1, 1, 1, 0);
         Account myAccount = [SELECT Id, actif__c FROM Account WHERE actif__c = true LIMIT 1];
         List<Order> orderToDelete = [SELECT Id FROM Order WHERE AccountId =: myAccount.Id];
         Date myDate = System.today();
