@@ -1,15 +1,10 @@
 public class OrderTriggerHandler {
     public void preventUpdateIfNoProduct(Map<id,Order> oldOrderMap, Map<id,Order> newOrderMap) {
-        //on obtient liste des orders & OrderItems
-        //pour chaque order dans la liste,
-        //si la liste des OrderItems ==0
-        //empêche la mise à jour
-        //affiche un message d'erreur
         //1. Get + Compare Status or orders between Old & New
         //2. If in new orders with modified status = no order items = error
         //create id set
         Set<Id> newOrderIds = new Set<Id>();
-
+        //for each order in new map
         for (Order newOrd : newOrderMap.values()) {
             //access "old" record by its id in trigger.oldmap
             Order oldOrd = oldOrderMap.get(newOrd.Id);

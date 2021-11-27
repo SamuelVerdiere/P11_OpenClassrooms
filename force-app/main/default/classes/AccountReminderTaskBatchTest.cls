@@ -3,22 +3,27 @@ public with sharing class AccountReminderTaskBatchTest {
     @isTest
     static void AssumeTaskIsCreated() {
         //GIVEN :
+            //create empty account
         Account myAccount = new Account(Name = 'Test Account');
         insert myAccount;
+            //see if there is task within that account
         List<Task> noTasks = [SELECT Id FROM Task WHERE WhatId =: myAccount.Id];
-        //WHEN :
+        //WHEN : run batch
         Test.startTest();
         AccountReminderTaskBatch mybatch = new AccountReminderTaskBatch();
         Id batchId = Database.executeBatch(mybatch);
         Test.stopTest();
+            //get new values from the account and task
         Account newAccount = [SELECT Id FROM Account];
         List<Task> newTasks = [SELECT WhatId, Subject, Description FROM Task];
         Task myNewTask = [SELECT WhatId, Subject, Description FROM Task LIMIT 1];
         //THEN :
+            //assume there was no task at start, and a task after batch
+        System.assertEquals(0, noTasks.size());
         System.assertEquals(1, newTasks.size());
+            //identify parameters from task to be sure
         System.assertEquals('Call', myNewTask.Subject);
         System.assertEquals('Call client. Reminder in 5 days.', myNewTask.Description);
-        System.assertEquals(0, noTasks.size());
     }
 
     @isTest
@@ -57,5 +62,65 @@ public with sharing class AccountReminderTaskBatchTest {
             //compare new values of tasks lists size
         System.assertEquals(sizeOneTasks.size(),tasksCreated.size());
     }
+
+    @isTest
+    static void checkWithManyAccounts() {
+        //GIVEN :
+            //create empty accounts
+        DataFactory.createOrders(200, 0, 0, 0);
+        String nam = 'Account for';
+            //see if there is task within accounts
+        List<Account> accWithoutTasks = [SELECT Id FROM Account];
+        Account accWithNoTask = [SELECT Id FROM Account WHERE Name LIKE:'%' + nam + '%' LIMIT 1];
+        List<Task> noTasks = [SELECT Id FROM Task];
+        //WHEN : run batch
+        Test.startTest();
+        AccountReminderTaskBatch mybatch = new AccountReminderTaskBatch();
+        Id batchId = Database.executeBatch(mybatch);
+        Test.stopTest();
+            //get new values from the account and task
+        Account newAccount = [SELECT Id FROM Account LIMIT 1];
+        List<Task> newTasks = [SELECT WhatId, Subject, Description FROM Task];
+        Task myNewTask = [SELECT WhatId, Subject, Description FROM Task LIMIT 1];
+        //THEN :
+            //assume there was no task at start, and a task after batch
+        System.assertEquals(0, noTasks.size());
+        System.assertEquals(200, newTasks.size());
+            //identify parameters from task to be sure
+        System.assertEquals('Call', myNewTask.Subject);
+        System.assertEquals('Call client. Reminder in 5 days.', myNewTask.Description);
+    }
+
+    @isTest
+    static void getErrorIfBatchTooBig() {
+        //GIVEN :
+            //create empty accounts
+        DataFactory.createOrders(200, 0, 0, 0);
+        String nam = 'Account for';
+            //see if there is task within accounts
+        List<Account> accWithoutTasks = [SELECT Id FROM Account];
+        Account accWithNoTask = [SELECT Id FROM Account WHERE Name LIKE:'%' + nam + '%' LIMIT 1];
+        List<Task> noTasks = [SELECT Id FROM Task];
+        //WHEN : run batch
+        Test.startTest();
+        SchedulerReminderTaskBatchable myschedule = new SchedulerReminderTaskBatchable();
+        String d = '0 0 1 1/1 * ? *';
+        System.schedule('batch Schedule', d, myschedule);
+        AccountReminderTaskBatch mybatch = new AccountReminderTaskBatch();
+        Id batchId = Database.executeBatch(mybatch);
+        Test.stopTest();
+            //get new values from the account and task
+        Account newAccount = [SELECT Id FROM Account LIMIT 1];
+        List<Task> newTasks = [SELECT WhatId, Subject, Description FROM Task];
+        Task myNewTask = [SELECT WhatId, Subject, Description FROM Task LIMIT 1];
+        //THEN :
+            //assume there was no task at start, and a task after batch
+        System.assertEquals(0, noTasks.size());
+        System.assertEquals(200, newTasks.size());
+            //identify parameters from task to be sure
+        System.assertEquals('Call', myNewTask.Subject);
+        System.assertEquals('Call client. Reminder in 5 days.', myNewTask.Description);
+    }
+
 }
 

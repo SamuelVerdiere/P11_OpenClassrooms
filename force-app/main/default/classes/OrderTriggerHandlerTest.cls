@@ -9,7 +9,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 0, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
@@ -32,7 +33,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
@@ -55,7 +57,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 2, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
@@ -80,7 +83,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
@@ -109,7 +113,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order
+         - The number of tasks for account  */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
@@ -129,13 +134,14 @@ public with sharing class OrderTriggerHandlerTest {
          System.assertEquals(0, listOfItems.size());
      }}
 
-    /* TESTS IN AFTER DELETE */
+    /* TESTS IN AFTER DELETE : method uncheckIfNoOrder */
      @isTest
      public static void UncheckBoxIfLastOrderDeleted() {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 0, 0);
          Set<Id> orderId = new Set<Id>();
@@ -157,7 +163,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 0, 0, 0);
          //WHEN
@@ -173,7 +180,8 @@ public with sharing class OrderTriggerHandlerTest {
          /* the test method from the factory takes as parameters :
          - The Number of Accounts needed
          - The Number of Orders per Accound needed
-         - The quantity of Items per order */
+         - The quantity of Items per order 
+         - The number of tasks for account */
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 1, 0);
          Set<Id> orderId = new Set<Id>();
@@ -197,7 +205,8 @@ public with sharing class OrderTriggerHandlerTest {
         /* the test method from the factory takes as parameters :
         - The Number of Accounts needed
         - The Number of Orders per Accound needed
-        - The quantity of Items per order */
+        - The quantity of Items per order 
+         - The number of tasks for account */
         //GIVEN : create data
         DataFactory.createOrders(1, 1, 1, 0);
         Account myAccount = [SELECT Id, actif__c FROM Account WHERE actif__c = true LIMIT 1];
@@ -239,5 +248,4 @@ public with sharing class OrderTriggerHandlerTest {
         System.assertEquals(true, stillCheckedAccount.actif__c);
         System.assertEquals(myAccount.actif__c, stillCheckedAccount.actif__c);
     }
-
 }
