@@ -63,19 +63,20 @@ public with sharing class OrderTriggerHandlerTest {
          DataFactory.createOrders(1, 1, 2, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
          List<OrderItem> listOfItems = [SELECT Id FROM OrderItem];
+         OrderItem myOrderItem = [SELECT Id FROM OrderItem LIMIT 1];
          //WHEN : activating trigger with conditions
          Test.startTest();
-         listOfItems.remove(1);
-         update listOfItems;
+         delete myOrderItem;
          for(Order ord: listOfOrders) {
              ord.Status = 'Activated';
          }
          update listOfOrders;
          //THEN : assert results
          Test.stopTest();
+         List<OrderItem> newList = [SELECT Id FROM OrderItem];
          for(Order ord : listOfOrders) {
          System.assertEquals('Activated', ord.Status);
-         System.assertEquals(1, listOfItems.size());
+         System.assertEquals(1, newList.size());
      }}
 
     @isTest
@@ -88,14 +89,10 @@ public with sharing class OrderTriggerHandlerTest {
          //GIVEN : create data
          DataFactory.createOrders(1, 1, 1, 0);
          List<Order> listOfOrders = [SELECT Id, Status FROM Order];
-         List<OrderItem> listOfItems = [SELECT Id FROM OrderItem];
+         OrderItem myOrderItem = [SELECT Id FROM OrderItem LIMIT 1];
          //WHEN : activating trigger with conditions
          Test.startTest();
-         listOfItems.remove(0);
-         update listOfItems;
-         for(Order ord: listOfOrders) {
-             ord.Status = 'Activated';
-         }
+         delete myOrderItem;
          try {
          update listOfOrders;
         //THEN : assert results
@@ -103,36 +100,11 @@ public with sharing class OrderTriggerHandlerTest {
              System.assert(e.getMessage().contains('An order must have at least one product.'));
          }
          Test.stopTest();
-         for(Order ord : listOfOrders) {
-         System.assertEquals('Activated', ord.Status);
-         System.assertEquals(0, listOfItems.size());
-    }}
-
-    @isTest
-    public static void checkIfNoItemsAndNoTrigger() {
-         /* the test method from the factory takes as parameters :
-         - The Number of Accounts needed
-         - The Number of Orders per Accound needed
-         - The quantity of Items per order
-         - The number of tasks for account  */
-         //GIVEN : create data
-         DataFactory.createOrders(1, 1, 1, 0);
-         List<Order> listOfOrders = [SELECT Id, Status FROM Order];
-         List<OrderItem> listOfItems = [SELECT Id FROM OrderItem];
-         //WHEN : activating trigger with conditions
-         Test.startTest();
-         listOfItems.remove(0);
-         update listOfItems;
-         for(Order ord: listOfOrders) {
-             ord.Description = 'This is a test description.';
-         }
-         update listOfOrders;
-         Test.stopTest();
-         //THEN : assert results
+         List<OrderItem> newOrderItems = [SELECT Id FROM OrderItem];
          for(Order ord : listOfOrders) {
          System.assertEquals('Draft', ord.Status);
-         System.assertEquals(0, listOfItems.size());
-     }}
+         System.assertEquals(0, newOrderItems.size());
+    }}
 
     /* TESTS IN AFTER DELETE : method uncheckIfNoOrder */
      @isTest
@@ -195,6 +167,7 @@ public with sharing class OrderTriggerHandlerTest {
          Account newAccount = [SELECT Id, actif__c FROM Account LIMIT 1];
          List<Order> newOrders = [SELECT Id FROM Order WHERE AccountId =: newAccount.Id];
          System.assertEquals(0, newOrders.size());
+         System.assertEquals(true, myAccount.actif__C);
          System.assertEquals(false, newAccount.actif__c);
          System.assertNotEquals(newAccount.actif__c, myAccount.actif__c);
          }
@@ -229,7 +202,7 @@ public with sharing class OrderTriggerHandlerTest {
         Order orderToUpdate = [SELECT Id, Description FROM Order LIMIT 1];
         orderToUpdate.Description = 'This is test description';
         update orderToUpdate;
-       //so the checkbox should be true
+        //so the checkbox should be true
         Account checkedAccount = [SELECT Id, actif__c FROM Account LIMIT 1];
         //and the orders should be 2
         List<Order> listOfNewOrders = [SELECT Id FROM Order WHERE AccountId =: checkedAccount.Id];
